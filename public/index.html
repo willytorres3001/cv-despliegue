@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Willy Torres | CV</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e3a8a);
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+    .cv { max-width: 760px; width: 100%; }
+    header { text-align: center; margin-bottom: 32px; }
+    .avatar {
+      width: 110px; height: 110px; border-radius: 50%;
+      background: #38bdf8; color: #0f172a;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 42px; font-weight: bold; margin: 0 auto 16px;
+    }
+    h1 { font-size: 2rem; }
+    .sub { color: #94a3b8; margin-top: 6px; }
+    section {
+      background: rgba(30, 41, 59, 0.85);
+      border-radius: 16px; padding: 24px; margin-bottom: 20px;
+    }
+    h2 { color: #38bdf8; margin-bottom: 12px; font-size: 1.2rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      background: #0ea5e9; color: #0f172a;
+      padding: 6px 14px; border-radius: 999px; font-weight: 600; font-size: 0.9rem;
+    }
+    a { color: #38bdf8; }
+    footer { text-align: center; color: #64748b; font-size: 0.85rem; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <main class="cv">
+    <header>
+      <div class="avatar">W</div>
+      <h1 id="nombre">Cargando...</h1>
+      <p class="sub" id="carrera"></p>
+    </header>
+
+    <section>
+      <h2>Sobre mí</h2>
+      <p>Estudiante de Tecsup, ciclo <span id="ciclo"></span>, enfocado en el desarrollo de aplicaciones web y móviles. Me interesan los microservicios, la seguridad con JWT y el despliegue en la nube.</p>
+    </section>
+
+    <section>
+      <h2>Tecnologías</h2>
+      <div class="tags" id="tecnologias"></div>
+    </section>
+
+    <section>
+      <h2>Enlaces</h2>
+      <p>GitHub: <a id="github" target="_blank" rel="noopener"></a></p>
+    </section>
+
+    <footer>Datos cargados desde el backend: /api/perfil</footer>
+  </main>
+
+  <script>
+    fetch('/api/perfil')
+      .then(r => r.json())
+      .then(p => {
+        document.getElementById('nombre').textContent = p.nombre;
+        document.getElementById('carrera').textContent = p.carrera;
+        document.getElementById('ciclo').textContent = p.ciclo;
+        const gh = document.getElementById('github');
+        gh.textContent = p.github;
+        gh.href = p.github;
+        document.getElementById('tecnologias').innerHTML =
+          p.tecnologias.map(t => `<span class="tag">${t}</span>`).join('');
+      })
+      .catch(() => {
+        document.getElementById('nombre').textContent = 'Error al cargar el perfil';
+      });
+  </script>
+</body>
+</html>
